@@ -1,0 +1,35 @@
+name: Build and Test
+
+# Runs this workflow on every push and every pull request targeting main.
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-run:
+    # Fresh Ubuntu VM, provided free by GitHub, spun up just for this run.
+    runs-on: ubuntu-latest
+
+    steps:
+      # Downloads repo's code onto the VM so later steps can see it.
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      # ubuntu-latest ships with g++ already installed, but this line pins
+      # a specific modern version explicitly rather than relying on
+      # whatever happens to be preinstalled.
+      - name: Install g++
+        run: sudo apt-get update && sudo apt-get install -y g++
+
+      # The exact same command you run locally — same flags, same source.
+      # This is the "integration" part of Continuous Integration: prove the
+      # project builds cleanly outside your own machine, not just on it.
+      - name: Build
+        run: g++ -std=c++17 -Wall -Wextra -Iinclude *.cpp -o orderbook
+
+      # main.cpp returns 1 if any CHECK fails, 0 if everything passes.
+      # A non-zero exit code here fails the whole workflow (red X on GitHub).
+      - name: Run
+        run: ./orderbook
