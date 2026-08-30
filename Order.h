@@ -26,18 +26,17 @@ using Timestamp = std::uint64_t;
 //    the engine is the single source of truth for arrival sequence, not
 //    the caller;
 
+
 struct Order
 {
     OrderId id;
-    OrderType type;
     Side side;
-    Price price; // ignored for Market orders
+    OrderType type;
+    Price price;// ignored for Market orders
     Quantity quantity;
     Timestamp timestamp; // set by OrderBook on arrival
 
-    Order(OrderId id, OrderType type, Side side, Price price, Quantity quantity)
-        : id(id), type(type), side(side), price(price), quantity(quantity), timestamp(0) {}
+    Order(OrderId id, Side side, OrderType type, Price price, Quantity quantity)
+        : id(id), side(side), type(type), price(price), quantity(quantity), timestamp(0) {}
 };
-
-
 
