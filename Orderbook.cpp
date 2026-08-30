@@ -114,16 +114,16 @@ bool OrderBook::cancelOrder(OrderId id) {
 
 bool OrderBook::bestBid(Price& outPrice, Quantity& outQty) const {
     if (bids_.empty()) return false;
-    const auto& [price, level] = *bids_.begin(); // bids_ sorted descending
-    outPrice = price;
-    outQty = level.empty() ? 0 : level.front().quantity;
+    auto it = bids_.begin(); // bids_ sorted descending
+    outPrice = it->first;
+    outQty = it->second.empty() ? 0 : it->second.front().quantity;
     return true;
 }
 
 bool OrderBook::bestAsk(Price& outPrice, Quantity& outQty) const {
     if (asks_.empty()) return false;
-    const auto& [price, level] = *asks_.begin(); // asks_ sorted ascending
-    outPrice = price;
-    outQty = level.empty() ? 0 : level.front().quantity;
+    auto it = asks_.begin(); // asks_ sorted ascending
+    outPrice = it->first;
+    outQty = it->second.empty() ? 0 : it->second.front().quantity;
     return true;
 }

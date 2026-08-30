@@ -17,6 +17,8 @@ public:
     bool bestAsk(Price& outPrice,Quantity& outQty) const;
 
 private:
+void match(Order& incoming, std::vector<Trade>& trades);
+
 // Inserts `order` (whatever quantity remains) into its own side's book
     // at the back of its price level's deque, and records its location in
     // locations_. Only called for Limit orders with quantity > 0 remaining.
@@ -26,7 +28,8 @@ private:
     // Asks sorted ascending (best ask = lowest price) -> begin() is best.
     // Each price level is a FIFO queue -> time priority within a level.
     std::map<Price, std::deque<Order>, std::greater<Price>> bids_;
-    std::map<Price, std::deque<Order>>                      asks_;
+
+    std::map<Price, std::deque<Order>> asks_;
  
     // For O(1)-ish cancel lookup: which side + price level an order id lives in.
     struct OrderLocation {
