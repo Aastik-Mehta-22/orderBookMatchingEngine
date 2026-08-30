@@ -3,6 +3,7 @@
 
 std::vector<Trade> OrderBook::addOrder(Order order) {
     // The engine is the single source of truth for arrival sequence —
+    // overwrite whatever the caller set
     order.timestamp = nextTimestamp_++;
 
     std::vector<Trade> trades;
